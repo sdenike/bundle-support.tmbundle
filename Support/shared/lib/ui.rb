@@ -363,7 +363,7 @@ module TextMate
           end
         end
         result = %x{"$TM_SUPPORT_PATH/bin/CocoaDialog.app/Contents/MacOS/CocoaDialog" 2>/dev/console #{type.shellescape} #{str} --float}
-        result = result.to_a.map{|line| line.chomp}
+        result = result.lines.map{|line| line.chomp}
         if (type == "fileselect")
           if result.length == 0
             return_value = options['button2'] # simulate cancel

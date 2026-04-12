@@ -9,7 +9,6 @@ require "#{ENV['TM_SUPPORT_PATH']}/lib/tm/tempfile.rb"
 require 'cgi'
 require 'fcntl'
 
-$KCODE = 'u' if (RUBY_VERSION.to_f < 1.9)
 
 $SCRIPTMATE_VERSION = "$Revision$"
 
@@ -171,7 +170,7 @@ class UserScript
     end
     def filter_cmd(cmd)
       # this method is called with this list:
-      #     [executable, args, e_sh(@path), ARGV.to_a ].flatten
+      #     [executable, args, e_sh(@path), ARGV].flatten
       cmd
     end
     def version_string
@@ -185,7 +184,7 @@ class UserScript
       rd.fcntl(Fcntl::F_SETFD, Fcntl::FD_CLOEXEC)
       ENV['TM_ERROR_FD'] = wr.to_i.to_s
       if @saved
-        cmd = filter_cmd([executable, args, e_sh(@path), ARGV.to_a ].flatten) 
+        cmd = filter_cmd([executable, args, e_sh(@path), ARGV].flatten) 
         stdin, stdout, stderr, pid = my_popen3(cmd.join(" "))
         wr.close
         block.call(stdout, stderr, rd, pid)
@@ -194,7 +193,7 @@ class UserScript
           f.write @content
           @display_name = "untitled"
           @temp_file = f.path
-          cmd = filter_cmd([executable, args, e_sh(f.path), ARGV.to_a ].flatten)
+          cmd = filter_cmd([executable, args, e_sh(f.path), ARGV].flatten)
           stdin, stdout, stderr, pid = my_popen3(cmd.join(" "))
           wr.close
           block.call(stdout, stderr, rd, pid)
